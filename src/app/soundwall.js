@@ -1,3 +1,4 @@
+/*global requestAnimationFrame */
 
 var Three = require('../lib/three.min');
 
@@ -20,7 +21,7 @@ var create = function(sceneWidth, sceneHeight) {
     scene.add(wall.mesh);
 
     var renderer = new Three.WebGLRenderer();
-    renderer.setSize( window.innerWidth, window.innerHeight );
+    renderer.setSize( sceneWidth, sceneHeight );
 
     camera.lookAt(scene.position);
 

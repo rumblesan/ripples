@@ -1,3 +1,4 @@
+/*jslint browser: true */
 
 var domready = require('./lib/ready');
 var SoundWall = require('./app/soundwall');
