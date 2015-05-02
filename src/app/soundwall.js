@@ -3,8 +3,6 @@
 var Three = require('../lib/three.min');
 
 var Wall = require('./wall');
-var Lights = require('./lights');
-var Controls = require('./controls');
 
 var create = function(sceneWidth, sceneHeight) {
 
