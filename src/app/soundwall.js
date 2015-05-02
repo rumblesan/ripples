@@ -39,9 +39,10 @@ var create = function(sceneWidth, sceneHeight) {
     var renderer = new Three.WebGLRenderer();
     renderer.setSize( sceneWidth, sceneHeight );
 
-    scene.add(Lights.createDirectional(0xffaaff,1));
-
-    scene.add(Lights.createAmbient(0x001100));
+    var mainLight = new Three.DirectionalLight(0xbfaadd,0.5);
+    mainLight.castShadow = true;
+    mainLight.position.set(0, 0, 100)
+    scene.add(mainLight);
 
     var render = function (t) {
         try {
