@@ -44,11 +44,16 @@ var create = function(sceneWidth, sceneHeight) {
     scene.add(Lights.createAmbient(0x001100));
 
     var render = function (t) {
-        requestAnimationFrame(function () {
-            render(t + config.animationSpeed);
-        });
-        renderer.render(scene, camera);
-        wall.animate(t);
+        try {
+            renderer.render(scene, camera);
+            wall.animate(t);
+            requestAnimationFrame(function () {
+                render(t + config.animationSpeed);
+            });
+        } catch (e) {
+            console.log('Seems there was an error');
+            throw e;
+        }
     };
 
     var raycaster = new Three.Raycaster();
