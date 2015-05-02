@@ -3,6 +3,10 @@
   "version": "0.1.0",
   "description": "A three.js experiment",
   "main": "src/main.js",
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/rumblesan/soundwall.git"
+  },
   "author": "Guy John",
   "license": "BSD-3",
   "scripts": {
