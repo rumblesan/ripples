@@ -13,7 +13,7 @@ domready(function () {
 
     console.log('App loaded');
 
-    app.render();
+    app.render(0);
 
 });
 

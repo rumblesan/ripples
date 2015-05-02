@@ -15,21 +15,26 @@ var create = function(sceneWidth, sceneHeight) {
         0.1,
         1000
     );
-    camera.position.set(0, 0, 50);
+    camera.position.set(0, 0, 200);
 
-    var wall = Wall.createWall(3, 3, 20, false);
+    var wall = Wall.createWall(250, 130, 5, false);
     scene.add(wall.mesh);
 
     var renderer = new Three.WebGLRenderer();
     renderer.setSize( sceneWidth, sceneHeight );
 
-    camera.lookAt(scene.position);
 
-    var render = function () {
-        requestAnimationFrame( render );
+    var speed = 0.01;
 
+    var render = function (t) {
+        requestAnimationFrame(function () {
+            render(t + speed);
+        });
         renderer.render(scene, camera);
+        wall.animate(t);
     };
+
+    wall.createRipple(7, 14);
 
     return {
         renderer: renderer,
