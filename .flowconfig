@@ -1,9 +1,0 @@
-[ignore]
-.*/dist/.*
-
-[include]
-
-[libs]
-./src/interfaces/
-
-[options]

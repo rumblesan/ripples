@@ -18,17 +18,6 @@
   },
   "devDependencies": {
     "browserify": "^9.0.6",
-    "http-server": "^0.8.0",
-    "reactify": "^1.1.0"
-  },
-  "browserify": {
-    "transform": [
-      [
-        "reactify",
-        {
-          "strip-types": true
-        }
-      ]
-    ]
+    "http-server": "^0.8.0"
   }
 }

@@ -1,33 +1,31 @@
-/* @flow */
 
-var THREE = require('../lib/three.min');
+var Three = require('../lib/three.min');
 
-var create = function(sceneWidth: number, sceneHeight: number): AppObj {
+var Wall = require('./wall');
+
+var create = function(sceneWidth, sceneHeight) {
 
     'use strict';
 
-    var scene = new THREE.Scene();
-    var camera = new THREE.PerspectiveCamera(
+    var scene = new Three.Scene();
+    var camera = new Three.PerspectiveCamera(
         75,
         sceneWidth / sceneHeight,
         0.1,
         1000
     );
-    camera.position.z = 5;
+    camera.position.set(0, 0, 50);
 
-    var renderer = new THREE.WebGLRenderer();
+    var wall = Wall.createWall(3, 3, 20, false);
+    scene.add(wall.mesh);
+
+    var renderer = new Three.WebGLRenderer();
     renderer.setSize( window.innerWidth, window.innerHeight );
 
-    var geometry = new THREE.BoxGeometry( 1, 1, 1 );
-    var material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
-    var cube = new THREE.Mesh( geometry, material );
-    scene.add( cube );
+    camera.lookAt(scene.position);
 
     var render = function () {
         requestAnimationFrame( render );
-
-        cube.rotation.x += 0.1;
-        cube.rotation.y += 0.1;
 
         renderer.render(scene, camera);
     };
