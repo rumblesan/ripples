@@ -9,10 +9,11 @@ Wall.createWall = function (xPoints, yPoints, tileSize) {
 
     var rippleState = {
         ripples: [],
-        rippleRange: 10,
-        height: 10,
-        rippleDecay: 0.999,
-        rippleCleanupThresh: 0.01
+        rippleRange: 1,
+        height: 1,
+        rippleDecay: 0.9,
+        rippleCleanupThresh: 0.001,
+        rippleHeightThresh: 0.001
     };
 
     var midXPoint = ((xPoints - 1)/2) * tileSize;
@@ -22,11 +23,20 @@ Wall.createWall = function (xPoints, yPoints, tileSize) {
     wall.geometry = Wall.createGeometry(wall.points);
 
     wall.material = new Three.MeshBasicMaterial( { color: 0xFF0000, wireframe: true } );
+    wall.material = new Three.MeshPhongMaterial(
+        {
+            ambient: 0xff0000,
+            color: 0x09BDE6,
+            specular: 0x999966,
+            shininess: 12,
+            shading: Three.FlatShading
+        }
+    );
 
     wall.mesh = new Three.Mesh(wall.geometry, wall.material);
 
     var rotAxis = new Three.Vector3(0,1,0);
-    //Wall.rotate(wall.mesh, rotAxis, Math.PI);
+    Wall.rotate(wall.mesh, rotAxis, Math.PI);
     wall.mesh.translateX(-midXPoint);
     wall.mesh.translateY(-midYPoint);
 
@@ -39,7 +49,7 @@ Wall.createWall = function (xPoints, yPoints, tileSize) {
     wall.createRipple = function (xPosition, yPosition) {
 
         var ripple = {
-            energy: 10,
+            energy: 1,
             xPos: xPosition,
             yPos: yPosition
         };
@@ -51,30 +61,55 @@ Wall.createWall = function (xPoints, yPoints, tileSize) {
 
         var calcOffset = function(ripple, t, x, y) {
             var distance = Math.sqrt(Math.pow((ripple.xPos - x), 2) + Math.pow((ripple.yPos - y), 2));
-            var decay = rippleState.rippleRange / distance;
-            var height = Math.sin(-t - distance) * decay * rippleState.height;
+            var decay = rippleState.rippleRange / Math.pow(distance, 1);
+            var height = Math.sin(t - distance) * decay * rippleState.height * ripple.energy;
             return height;
         };
 
-        var calcRipple = function (ripple, t) {
+        var calcRipple = function (ripple, t, heights) {
             var x, y, o;
             for (x = 0; x < wall.points.xPoints; x += 1) {
                 for (y = 0; y < wall.points.yPoints; y += 1) {
                     o = calcOffset(ripple, t, x, y);
-                    wall.points.p[x][y].setZ(o);
+                    heights[x][y] += o;
                 }
             }
         };
 
+        var genHeightMap = function () {
+            var heightMap = [];
+            var x, y;
+            for (x = 0; x < wall.points.xPoints; x += 1) {
+                heightMap[x] = [];
+                for (y = 0; y < wall.points.yPoints; y += 1) {
+                    heightMap[x][y] = 0;
+                }
+            }
+            return heightMap;
+        };
+
+        var applyHeightMap = function (heightMap) {
+            var x, y;
+            for (x = 0; x < wall.points.xPoints; x += 1) {
+                for (y = 0; y < wall.points.yPoints; y += 1) {
+                    wall.points.p[x][y].setZ(heightMap[x][y]);
+                }
+            }
+        };
+
+
+        var heightMap = genHeightMap();
         var r;
         var i;
         for (i = 0; i < rippleState.ripples.length; i += 1) {
             r = rippleState.ripples[i];
-            calcRipple(r, t);
-            wall.mesh.geometry.verticesNeedUpdate = true;
-            wall.mesh.geometry.normalsNeedUpdate = true;
-            wall.mesh.geometry.computeFaceNormals();
+            calcRipple(r, t, heightMap);
         }
+
+        applyHeightMap(heightMap);
+        wall.mesh.geometry.verticesNeedUpdate = true;
+        wall.mesh.geometry.normalsNeedUpdate = true;
+        wall.mesh.geometry.computeFaceNormals();
 
         var remainingRipples = [];
         for (i = 0; i < rippleState.ripples.length; i += 1) {

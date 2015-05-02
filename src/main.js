@@ -11,7 +11,9 @@ domready(function () {
 
     document.body.appendChild(app.renderer.domElement);
 
-    console.log('App loaded');
+    app.renderer.domElement.addEventListener('click', function (e) {
+        app.click(e.clientX / window.innerWidth, e.clientY / window.innerHeight);
+    });
 
     app.render(0);
 
