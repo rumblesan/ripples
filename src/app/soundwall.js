@@ -17,9 +17,20 @@ var create = function(sceneWidth, sceneHeight) {
         0.1,
         1000
     );
-    camera.position.set(0, 0, 200);
+    var cameraDist = 200;
+    camera.position.set(0, 0, cameraDist);
+    var vFOV = camera.fov * Math.PI / 180;
+    var height = 2 * Math.tan( vFOV / 2 ) * cameraDist; // visible height
 
-    var wall = Wall.createWall(20, 10, 35, false);
+    var aspect = sceneWidth / sceneHeight;
+    var width = height * aspect; 
+    console.log(height, width);
+
+
+    var tilesize = 5;
+    var wallWidth = Math.ceil(width / tilesize) + 4;
+    var wallHeight = Math.ceil(height / tilesize) + 4;
+    var wall = Wall.createWall(wallWidth, wallHeight, tilesize);
     scene.add(wall.mesh);
 
     var renderer = new Three.WebGLRenderer();
@@ -39,19 +50,22 @@ var create = function(sceneWidth, sceneHeight) {
         wall.animate(t);
     };
 
-
     var raycaster = new Three.Raycaster();
     var mouse = new Three.Vector2();
     var click = function (xVal, yVal) {
-        var xPos, yPos;
-        mouse.x = xVal;
-        mouse.y = yVal;
+        var xPos, yPos, p;
+        mouse.x = (xVal * 2) - 1;
+        mouse.y = -(yVal * 2) + 1;
+        console.log(mouse);
         raycaster.setFromCamera( mouse, camera );
         var intersects = raycaster.intersectObjects( [wall.mesh] );
+        console.log(intersects);
         if (intersects.length > 0) {
-            xPos = intersects[0].face.a % wall.points.xPoints;
-            yPos = intersects[0].face.a % wall.points.yPoints;
-            wall.createRipple(-xPos, -yPos);
+            p = intersects[0].face.a;
+            xPos = Math.floor(p / wall.points.yPoints);
+            yPos = p % wall.points.yPoints;
+            wall.createRipple(xPos, yPos);
+            console.log(xPos, yPos);
         }
     };
 
