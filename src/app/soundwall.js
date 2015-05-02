@@ -24,7 +24,6 @@ var create = function(sceneWidth, sceneHeight) {
 
     var aspect = sceneWidth / sceneHeight;
     var width = height * aspect; 
-    console.log(height, width);
 
 
     var tilesize = 5;
@@ -56,16 +55,13 @@ var create = function(sceneWidth, sceneHeight) {
         var xPos, yPos, p;
         mouse.x = (xVal * 2) - 1;
         mouse.y = -(yVal * 2) + 1;
-        console.log(mouse);
         raycaster.setFromCamera( mouse, camera );
         var intersects = raycaster.intersectObjects( [wall.mesh] );
-        console.log(intersects);
         if (intersects.length > 0) {
             p = intersects[0].face.a;
             xPos = Math.floor(p / wall.points.yPoints);
             yPos = p % wall.points.yPoints;
             wall.createRipple(xPos, yPos);
-            console.log(xPos, yPos);
         }
     };
 
