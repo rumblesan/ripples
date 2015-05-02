@@ -4,6 +4,7 @@ var Plane = require('./plane');
 var Ripple = require('./ripple');
 
 var Wall = {};
+var internal = {};
 
 Wall.createWall = function (xPoints, yPoints, tileSize) {
 
@@ -42,57 +43,34 @@ Wall.createWall = function (xPoints, yPoints, tileSize) {
 
     wall.animate = function (t) {
 
-
-        var calcRipple = function (ripple, t, heights) {
-            var x, y, o;
-            for (x = 0; x < wall.points.xPoints; x += 1) {
-                for (y = 0; y < wall.points.yPoints; y += 1) {
-                    o = Ripple.calcOffset(ripple, t, x, y);
-                    heights[x][y] += o;
-                }
+        if (rippleState.ripples.length > 0) {
+            var heightMap = Ripple.genHeightMap(wall.points.xPoints, wall.points.yPoints);
+            var r, i;
+            for (i = 0; i < rippleState.ripples.length; i += 1) {
+                r = rippleState.ripples[i];
+                Ripple.applyRipple(r, t, heightMap);
             }
-        };
 
-        var genHeightMap = function () {
-            var heightMap = [];
-            var x, y;
-            for (x = 0; x < wall.points.xPoints; x += 1) {
-                heightMap[x] = [];
-                for (y = 0; y < wall.points.yPoints; y += 1) {
-                    heightMap[x][y] = 0;
-                }
-            }
-            return heightMap;
-        };
+            internal.applyHeightMap(wall, rippleState.height, heightMap);
+            wall.mesh.geometry.verticesNeedUpdate = true;
+            wall.mesh.geometry.normalsNeedUpdate = true;
+            wall.mesh.geometry.computeFaceNormals();
 
-        var applyHeightMap = function (heightMap) {
-            var x, y;
-            for (x = 0; x < wall.points.xPoints; x += 1) {
-                for (y = 0; y < wall.points.yPoints; y += 1) {
-                    wall.points.p[x][y].setZ(heightMap[x][y] * rippleState.height);
-                }
-            }
-        };
-
-
-        var heightMap = genHeightMap();
-        var r;
-        var i;
-        for (i = 0; i < rippleState.ripples.length; i += 1) {
-            r = rippleState.ripples[i];
-            calcRipple(r, t, heightMap);
+            rippleState.ripples = Ripple.update(rippleState.ripples);
         }
-
-        applyHeightMap(heightMap);
-        wall.mesh.geometry.verticesNeedUpdate = true;
-        wall.mesh.geometry.normalsNeedUpdate = true;
-        wall.mesh.geometry.computeFaceNormals();
-
-        rippleState.ripples = Ripple.update(rippleState.ripples);
 
     };
 
     return wall;
+};
+
+internal.applyHeightMap = function (wall, rippleHeight, heightMap) {
+    var x, y;
+    for (x = 0; x < heightMap.x; x += 1) {
+        for (y = 0; y < heightMap.y; y += 1) {
+            wall.points.p[x][y].setZ(heightMap.heights[x][y] * rippleHeight);
+        }
+    }
 };
 
 
