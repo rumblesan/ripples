@@ -65,8 +65,15 @@ var create = function(sceneWidth, sceneHeight) {
         }
     };
 
+    var resize = function (newWidth, newHeight) {
+        camera.aspect = newWidth / newHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize( newWidth, newHeight );
+    };
+
     return {
         click: click,
+        resize: resize,
         renderer: renderer,
         scene: scene,
         camera: camera,
