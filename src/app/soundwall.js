@@ -10,6 +10,13 @@ var create = function(sceneWidth, sceneHeight) {
 
     'use strict';
 
+    var config = {
+        cameraDistance: 200,
+        tilesize: 5,
+        sizeBuffer: 4,
+        animationSpeed: 0.1
+    };
+
     var scene = new Three.Scene();
     var camera = new Three.PerspectiveCamera(
         75,
@@ -17,19 +24,16 @@ var create = function(sceneWidth, sceneHeight) {
         0.1,
         1000
     );
-    var cameraDist = 200;
-    camera.position.set(0, 0, cameraDist);
+    camera.position.set(0, 0, config.cameraDistance);
     var vFOV = camera.fov * Math.PI / 180;
-    var height = 2 * Math.tan( vFOV / 2 ) * cameraDist; // visible height
-
-    var aspect = sceneWidth / sceneHeight;
-    var width = height * aspect; 
+    var height = 2 * Math.tan( vFOV / 2 ) * config.cameraDistance; // visible height
+    var width = height * camera.aspect; // visible width
 
 
-    var tilesize = 5;
-    var wallWidth = Math.ceil(width / tilesize) + 4;
-    var wallHeight = Math.ceil(height / tilesize) + 4;
-    var wall = Wall.createWall(wallWidth, wallHeight, tilesize);
+    var wallWidth = Math.ceil(width / config.tilesize) + config.sizeBuffer;
+    var wallHeight = Math.ceil(height / config.tilesize) + config.sizeBuffer;
+
+    var wall = Wall.createWall(wallWidth, wallHeight, config.tilesize);
     scene.add(wall.mesh);
 
     var renderer = new Three.WebGLRenderer();
@@ -39,11 +43,9 @@ var create = function(sceneWidth, sceneHeight) {
 
     scene.add(Lights.createAmbient(0x001100));
 
-    var speed = 0.1;
-
     var render = function (t) {
         requestAnimationFrame(function () {
-            render(t + speed);
+            render(t + config.animationSpeed);
         });
         renderer.render(scene, camera);
         wall.animate(t);
@@ -74,9 +76,7 @@ var create = function(sceneWidth, sceneHeight) {
     return {
         click: click,
         resize: resize,
-        renderer: renderer,
-        scene: scene,
-        camera: camera,
+        domElement: renderer.domElement,
         render: render
     };
 

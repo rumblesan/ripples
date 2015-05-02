@@ -5,14 +5,17 @@ var config = {
     sizeIncr: 0.5,
     widthIncr: 0.1,
     energyDecay: 0.95,
-    cleanupThresh: 0.0001
+    cleanupThresh: 0.0001,
+    startEnergy: 1,
+    startWidth: 2,
+    startSize: 0
 };
 
 Ripple.create = function (xPos, yPos) {
     var ripple = {
-        energy: 1,
-        size: 0,
-        width: 2,
+        energy: config.startEnergy,
+        size: config.startSize,
+        width: config.startWidth,
         xPos: xPos,
         yPos: yPos
     };

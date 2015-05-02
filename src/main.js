@@ -7,20 +7,20 @@ domready(function () {
 
     document.body = document.createElement('body');
 
-    var app = SoundWall.create(window.innerWidth, window.innerHeight);
+    var soundwall = SoundWall.create(window.innerWidth, window.innerHeight);
 
-    document.body.appendChild(app.renderer.domElement);
+    document.body.appendChild(soundwall.domElement);
 
-    app.renderer.domElement.addEventListener('click', function (e) {
+    soundwall.domElement.addEventListener('click', function (e) {
         e.preventDefault();
-        app.click(e.clientX / window.innerWidth, e.clientY / window.innerHeight);
+        soundwall.click(e.clientX / window.innerWidth, e.clientY / window.innerHeight);
     });
 
     window.addEventListener( 'resize', function () {
-        app.resize(window.innerWidth, window.innerHeight);
+        soundwall.resize(window.innerWidth, window.innerHeight);
     }, false );
 
-    app.render(0);
+    soundwall.render(0);
 
 });
 
