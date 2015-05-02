@@ -1,13 +1,13 @@
 /* @flow */
 
 var domready = require('./lib/ready');
-var App = require('./app/starter');
+var SoundWall = require('./app/soundwall');
 
 domready(function () {
 
     document.body = document.createElement('body');
 
-    var app = App.create(window.innerWidth, window.innerHeight);
+    var app = SoundWall.create(window.innerWidth, window.innerHeight);
 
     document.body.appendChild(app.renderer.domElement);
 
