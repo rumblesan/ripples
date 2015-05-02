@@ -1,9 +1,8 @@
-/*jslint browser: true */
-/*global require, module */
+/* @flow */
 
 var THREE = require('../lib/three.min');
 
-module.exports = function create(sceneWidth, sceneHeight) {
+var create = function(sceneWidth: number, sceneHeight: number): AppObj {
 
     'use strict';
 
@@ -40,5 +39,9 @@ module.exports = function create(sceneWidth, sceneHeight) {
         render: render
     };
 
+};
+
+module.exports = {
+    create: create
 };
 
