@@ -12,7 +12,7 @@ Wall.createWall = function (xPoints, yPoints, tileSize) {
 
     var rippleState = {
         ripples: [],
-        height: 1
+        height: 3
     };
 
     wall.points = Plane.createPoints(xPoints, yPoints, tileSize);
@@ -43,21 +43,19 @@ Wall.createWall = function (xPoints, yPoints, tileSize) {
 
     wall.animate = function (t) {
 
-        if (rippleState.ripples.length > 0) {
-            var heightMap = Ripple.genHeightMap(wall.points.xPoints, wall.points.yPoints);
-            var r, i;
-            for (i = 0; i < rippleState.ripples.length; i += 1) {
-                r = rippleState.ripples[i];
-                Ripple.applyRipple(r, t, heightMap);
-            }
-
-            internal.applyHeightMap(wall, rippleState.height, heightMap);
-            wall.mesh.geometry.verticesNeedUpdate = true;
-            wall.mesh.geometry.normalsNeedUpdate = true;
-            wall.mesh.geometry.computeFaceNormals();
-
-            rippleState.ripples = Ripple.update(rippleState.ripples);
+        var heightMap = Ripple.genHeightMap(wall.points.xPoints, wall.points.yPoints);
+        var r, i;
+        for (i = 0; i < rippleState.ripples.length; i += 1) {
+            r = rippleState.ripples[i];
+            Ripple.applyRipple(r, t, heightMap);
         }
+
+        internal.applyHeightMap(wall, rippleState.height, heightMap);
+        wall.mesh.geometry.verticesNeedUpdate = true;
+        wall.mesh.geometry.normalsNeedUpdate = true;
+        wall.mesh.geometry.computeFaceNormals();
+
+        rippleState.ripples = Ripple.update(rippleState.ripples);
 
     };
 

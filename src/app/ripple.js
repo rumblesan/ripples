@@ -1,19 +1,18 @@
 
 var Ripple = {};
 
-var rippleState = {
-    ripples: [],
-    rippleMaxRange: 20,
-    rippleRange: 0,
-    rippleRangeIncr: 0.4,
-    rippleDecay: 0.9,
-    rippleCleanupThresh: 0.001,
-    rippleHeightThresh: 0.001
+var config = {
+    sizeIncr: 0.5,
+    widthIncr: 0.1,
+    energyDecay: 0.95,
+    cleanupThresh: 0.0001
 };
 
 Ripple.create = function (xPos, yPos) {
     var ripple = {
         energy: 1,
+        size: 0,
+        width: 2,
         xPos: xPos,
         yPos: yPos
     };
@@ -37,9 +36,12 @@ Ripple.genHeightMap = function (xPoints, yPoints) {
 };
 
 Ripple.calcOffset = function(ripple, t, x, y) {
-    var distance = Math.sqrt(Math.pow((ripple.xPos - x), 2) + Math.pow((ripple.yPos - y), 2));
-    var decay = Math.max(rippleState.rippleMaxRange - distance, 0);
-    var heightVar = Math.sin(t - distance) * decay * ripple.energy;
+
+    var cellDistance = Math.sqrt(Math.pow((ripple.xPos - x), 2) + Math.pow((ripple.yPos - y), 2));
+    var diffDistance = cellDistance - ripple.size;
+    var decay = (Math.max(ripple.width - Math.abs(diffDistance), 0) / ripple.width);
+    var heightVar = Math.sin(t - cellDistance) * decay * ripple.energy;
+
     return heightVar;
 };
 
@@ -58,10 +60,15 @@ Ripple.update = function (ripples) {
     var r, i;
     for (i = 0; i < ripples.length; i += 1) {
         r = ripples[i];
-        r.energy = r.energy * rippleState.rippleDecay;
-        if (r.energy > rippleState.rippleCleanupThresh) {
+
+        r.energy = r.energy * config.energyDecay;
+        r.size += config.sizeIncr;
+        r.width += config.widthIncr;
+
+        if (r.energy > config.cleanupThresh) {
             remainingRipples.push(r);
         }
+
     }
     return remainingRipples;
 };
