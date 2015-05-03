@@ -3,8 +3,9 @@
 var Three = require('../lib/three.min');
 
 var Wall = require('./wall');
+var Audio = require('./audio');
 
-var create = function(sceneWidth, sceneHeight) {
+var create = function(sceneWidth, sceneHeight, audioCtx) {
 
     'use strict';
 
@@ -14,6 +15,8 @@ var create = function(sceneWidth, sceneHeight) {
         sizeBuffer: 4,
         animationSpeed: 0.1
     };
+
+    var audioSystem = Audio.create(audioCtx);
 
     var scene = new Three.Scene();
     var camera = new Three.PerspectiveCamera(
@@ -46,6 +49,7 @@ var create = function(sceneWidth, sceneHeight) {
         try {
             renderer.render(scene, camera);
             wall.animate(t);
+            audioSystem.delta()
             requestAnimationFrame(function () {
                 render(t + config.animationSpeed);
             });
@@ -68,6 +72,7 @@ var create = function(sceneWidth, sceneHeight) {
             xPos = Math.floor(p / wall.points.yPoints);
             yPos = p % wall.points.yPoints;
             wall.createRipple(xPos, yPos);
+            audioSystem.click(mouse.x, mouse.y);
         }
     };
 

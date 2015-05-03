@@ -2,12 +2,15 @@
 
 var domready = require('./lib/ready');
 var SoundWall = require('./app/soundwall');
+var Audio = require('./app/audio');
 
 domready(function () {
 
     document.body = document.createElement('body');
 
-    var soundwall = SoundWall.create(window.innerWidth, window.innerHeight);
+    var audioCtx = Audio.createContext(window);
+
+    var soundwall = SoundWall.create(window.innerWidth, window.innerHeight, audioCtx);
 
     document.body.appendChild(soundwall.domElement);
 
