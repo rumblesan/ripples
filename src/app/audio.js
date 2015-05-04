@@ -17,19 +17,27 @@ Audio.createContext = function (w) {
     return context;
 };
 
+var config = {
+    intensityDecr: 0.99,
+    intensityIncr: 0.1,
+    intensityIncrDiff: 0.4,
+    dropVoices: 6,
+    frequencies: [
+        440, 493.883, 523.251, 587.330, 659.255, 698.456, 783.991, 880
+    ]
+};
+
+internal.getNote = function () {
+    var n = Math.floor(Math.random() * config.frequencies.length);
+    return config.frequencies[n];
+};
+
 Audio.create = function (audioCtx) {
 
     var system = {};
 
-    console.log(Thicket);
     var thicket = Thicket.createSystem(audioCtx);
 
-    var config = {
-        intensityDecr: 0.99,
-        intensityIncr: 0.1,
-        intensityIncrDiff: 0.4,
-        dropVoices: 6
-    };
 
     var state = {
         intensity: 0,
@@ -41,7 +49,6 @@ Audio.create = function (audioCtx) {
         voiceNumber: 0
     };
 
-        console.log(Synths.drop);
     var i;
     for (i = 0; i < config.dropVoices; i += 1) {
         state.synthVoices.push(thicket.Synth.create(Synths.drop));
@@ -52,7 +59,7 @@ Audio.create = function (audioCtx) {
         thicket.Synth.play(
             state.synthVoices[state.voiceNumber],
             1,
-            []
+            ['freq', internal.getNote()]
         );
         state.voiceNumber += 1;
         if (state.voiceNumber >= config.dropVoices) {

@@ -17,7 +17,7 @@ Synth.drop = Amp(
                  Param('filterFreq', 200),
                  2
                ),
-               AREnvelope(0.2, 1)
+               AREnvelope(0.3, 1)
              );
 
 module.exports = Synth;
