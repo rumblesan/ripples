@@ -49,9 +49,17 @@ Audio.create = function (audioCtx) {
         voiceNumber: 0
     };
 
-    var i;
+    var masterOut = thicket.Effects.create(Synths.masterOut);
+    thicket.Synth.connectToMasterOut(masterOut, 'default');
+
+    var spaceFx = thicket.Effects.create(Synths.spaceFx);
+    thicket.Synth.connectSynthToInputs(masterOut, 'master', spaceFx, 'default');
+
+    var i, s;
     for (i = 0; i < config.dropVoices; i += 1) {
-        state.synthVoices.push(thicket.Synth.create(Synths.drop));
+        s = thicket.Synth.create(Synths.drop);
+        state.synthVoices.push(s);
+        thicket.Synth.connectSynthToInputs(spaceFx, 'fxinput', s, 'default');
     }
 
     system.click = function (xVal, yVal) {
