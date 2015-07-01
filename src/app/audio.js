@@ -32,6 +32,35 @@ internal.getNote = function () {
     return config.frequencies[n];
 };
 
+internal.createDropVoices = function (thicket, output, dropVoices) {
+    var state = {
+        dropVoices: dropVoices,
+        voiceNumber: 0,
+        synths: []
+    };
+
+    var i, s;
+    for (i = 0; i < state.dropVoices; i += 1) {
+        s = thicket.Synth.create(Synths.drop);
+        state.synths.push(s);
+        thicket.Synth.connectSynthToInputs(output, 'fxinput', s, 'default');
+    }
+
+    return {
+        play: function (length, parameterList) {
+            thicket.Synth.play(
+                state.synths[state.voiceNumber],
+                length,
+                parameterList
+            );
+            state.voiceNumber += 1;
+            if (state.voiceNumber >= config.dropVoices) {
+                state.voiceNumber = 0;
+            }
+        }
+    };
+};
+
 Audio.create = function (audioCtx) {
 
     var system = {};
@@ -44,9 +73,7 @@ Audio.create = function (audioCtx) {
         lastClickTime: 0,
         lastClickDiff: audioCtx.currentTime,
         x: 0,
-        y: 0,
-        synthVoices: [],
-        voiceNumber: 0
+        y: 0
     };
 
     var masterOut = thicket.Effects.create(Synths.masterOut);
@@ -55,24 +82,14 @@ Audio.create = function (audioCtx) {
     var spaceFx = thicket.Effects.create(Synths.spaceFx);
     thicket.Synth.connectSynthToInputs(masterOut, 'master', spaceFx, 'default');
 
-    var i, s;
-    for (i = 0; i < config.dropVoices; i += 1) {
-        s = thicket.Synth.create(Synths.drop);
-        state.synthVoices.push(s);
-        thicket.Synth.connectSynthToInputs(spaceFx, 'fxinput', s, 'default');
-    }
+    var dropSynth = internal.createDropVoices(thicket, spaceFx, config.dropVoices);
 
     system.click = function (xVal, yVal) {
 
-        thicket.Synth.play(
-            state.synthVoices[state.voiceNumber],
+        dropSynth.play(
             1,
             ['freq', internal.getNote()]
         );
-        state.voiceNumber += 1;
-        if (state.voiceNumber >= config.dropVoices) {
-            state.voiceNumber = 0;
-        }
 
         state.x = xVal;
         state.y = yVal;
@@ -82,8 +99,6 @@ Audio.create = function (audioCtx) {
             state.intensity += config.intensityIncr;
         }
         state.lastClickTime = audioCtx.currentTime;
-
-        console.log(state);
 
     };
 
