@@ -42,14 +42,13 @@ var create = function(sceneWidth, sceneHeight, audioCtx) {
 
     var mainLight = new Three.DirectionalLight(0xbfaadd,0.5);
     mainLight.castShadow = true;
-    mainLight.position.set(0, 0, 100)
+    mainLight.position.set(0, 0, 100);
     scene.add(mainLight);
 
     var render = function (t) {
         try {
             renderer.render(scene, camera);
             wall.animate(t);
-            audioSystem.delta()
             requestAnimationFrame(function () {
                 render(t + config.animationSpeed);
             });

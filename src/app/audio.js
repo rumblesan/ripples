@@ -1,6 +1,7 @@
 
 var Thicket = require('thicket');
 var Synths = require('./synths');
+var AudioLogic = require('./audioLogic');
 
 var Audio = {};
 var internal = {};
@@ -18,9 +19,6 @@ Audio.createContext = function (w) {
 };
 
 var config = {
-    intensityDecr: 0.99,
-    intensityIncr: 0.1,
-    intensityIncrDiff: 0.4,
     dropVoices: 6,
     frequencies: [
         440, 493.883, 523.251, 587.330, 659.255, 698.456, 783.991, 880
@@ -67,11 +65,9 @@ Audio.create = function (audioCtx) {
 
     var thicket = Thicket.createSystem(audioCtx);
 
+    var logic = AudioLogic.create(audioCtx);
 
     var state = {
-        intensity: 0,
-        lastClickTime: 0,
-        lastClickDiff: audioCtx.currentTime,
         x: 0,
         y: 0
     };
@@ -94,16 +90,8 @@ Audio.create = function (audioCtx) {
         state.x = xVal;
         state.y = yVal;
 
-        state.lastClickDiff = audioCtx.currentTime - state.lastClickTime;
-        if (state.lastClickDiff < config.intensityIncrDiff) {
-            state.intensity += config.intensityIncr;
-        }
-        state.lastClickTime = audioCtx.currentTime;
+        logic.click();
 
-    };
-
-    system.delta = function () {
-        state.intensity = state.intensity * config.intensityDecr;
     };
 
     return system;
