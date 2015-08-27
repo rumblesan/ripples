@@ -42,26 +42,5 @@ Synth.drop = Amp(
                AREnvelope(0.3, 1)
              );
 
-Synth.hat = Amp(
-              Filter(
-                Noise('white'),
-                'lowpass',
-                 Param('freq', 200),
-                 1
-              ),
-              AREnvelope(0.1, 0.5)
-            );
-
-Synth.kick = Amp(
-               Filter(
-                 Oscillator( Param('freq', 50), 'triangle'),
-                 'lowpass',
-                  200,
-                  1
-               ),
-               AREnvelope(0.1, 0.5)
-             );
-
-
 module.exports = Synth;
 

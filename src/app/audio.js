@@ -1,7 +1,6 @@
 
 var Thicket = require('thicket');
 var Synths = require('./synths');
-var AudioLogic = require('./audioLogic');
 
 var Audio = {};
 var internal = {};
@@ -65,8 +64,6 @@ Audio.create = function (audioCtx) {
 
     var thicket = Thicket.createSystem(audioCtx);
 
-    var logic = AudioLogic.create(audioCtx);
-
     var state = {
         x: 0,
         y: 0
@@ -89,8 +86,6 @@ Audio.create = function (audioCtx) {
 
         state.x = xVal;
         state.y = yVal;
-
-        logic.click();
 
     };
 
