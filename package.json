@@ -18,7 +18,11 @@
   },
   "devDependencies": {
     "browserify": "^9.0.6",
-    "http-server": "^0.8.0",
-    "thicket": "git://github.com/rumblesan/thicket.git"
+    "http-server": "^0.8.0"
+  },
+  "dependencies": {
+    "teoria": "^1.12.0",
+    "thicket": "git://github.com/rumblesan/thicket.git",
+    "underscore": "^1.8.3"
   }
 }

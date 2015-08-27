@@ -1,6 +1,8 @@
 
 var Thicket = require('thicket');
 var Synths = require('./synths');
+var Teoria = require('teoria');
+var _ = require('underscore');
 
 var Audio = {};
 var internal = {};
@@ -17,16 +19,17 @@ Audio.createContext = function (w) {
     return context;
 };
 
-var config = {
-    dropVoices: 6,
-    frequencies: [
-        440, 493.883, 523.251, 587.330, 659.255, 698.456, 783.991, 880
-    ]
-};
+var config = (function () {
+    return {
+        dropVoices: 6,
+        scaleNotes: 7,
+        scale: Teoria.note('a4').scale('minor')
+    };
+})();
 
 internal.getNote = function () {
-    var n = Math.floor(Math.random() * config.frequencies.length);
-    return config.frequencies[n];
+    var n = Math.ceil(Math.random() * config.scaleNotes);
+    return config.scale.get(n);
 };
 
 internal.createDropVoices = function (thicket, output, dropVoices) {
@@ -81,7 +84,7 @@ Audio.create = function (audioCtx) {
 
         dropSynth.play(
             1,
-            ['freq', internal.getNote()]
+            ['freq', internal.getNote().fq()]
         );
 
         state.x = xVal;
