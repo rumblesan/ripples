@@ -32,6 +32,11 @@ internal.getNote = function () {
     return config.scale.get(n);
 };
 
+internal.getChord = function () {
+    var n = Math.ceil(Math.random() * config.scaleNotes);
+    var note = config.scale.get(n);
+};
+
 internal.createDropVoices = function (thicket, output, dropVoices) {
     var state = {
         dropVoices: dropVoices,
