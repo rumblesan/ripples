@@ -1,23 +1,9 @@
 
-var Thicket = require('thicket');
-var Synths = require('./synths');
 var Teoria = require('teoria');
-var _ = require('underscore');
+var Tone   = require('Tone');
 
 var Audio = {};
 var internal = {};
-
-Audio.createContext = function (w) {
-    var context;
-    try {
-        // Fix up for prefixing
-        w.AudioContext = w.AudioContext||w.webkitAudioContext;
-        context = new w.AudioContext();
-    } catch(e) {
-        throw Error.create("WebAudio API not available");
-    }
-    return context;
-};
 
 var config = (function () {
     return {
@@ -37,60 +23,26 @@ internal.getChord = function () {
     var note = config.scale.get(n);
 };
 
-internal.createDropVoices = function (thicket, output, dropVoices) {
-    var state = {
-        dropVoices: dropVoices,
-        voiceNumber: 0,
-        synths: []
-    };
-
-    var i, s;
-    for (i = 0; i < state.dropVoices; i += 1) {
-        s = thicket.Synth.create(Synths.drop);
-        state.synths.push(s);
-        thicket.Synth.connectSynthToInputs(output, 'fxinput', s, 'default');
-    }
-
-    return {
-        play: function (length, parameterList) {
-            thicket.Synth.play(
-                state.synths[state.voiceNumber],
-                length,
-                parameterList
-            );
-            state.voiceNumber += 1;
-            if (state.voiceNumber >= config.dropVoices) {
-                state.voiceNumber = 0;
-            }
-        }
-    };
-};
-
-Audio.create = function (audioCtx) {
+Audio.create = function () {
 
     var system = {};
-
-    var thicket = Thicket.createSystem(audioCtx);
 
     var state = {
         x: 0,
         y: 0
     };
 
-    var masterOut = thicket.Effects.create(Synths.masterOut);
-    thicket.Synth.connectToMasterOut(masterOut, 'default');
+    var volume = new Tone.Volume(-24);
 
-    var spaceFx = thicket.Effects.create(Synths.spaceFx);
-    thicket.Synth.connectSynthToInputs(masterOut, 'master', spaceFx, 'default');
+    var spaceFx = new Tone.Freeverb();
 
-    var dropSynth = internal.createDropVoices(thicket, spaceFx, config.dropVoices);
+    var dropSynth = new Tone.PolySynth(config.dropVoices, Tone.Synth);
+
+    dropSynth.chain(spaceFx, volume, Tone.Master);
 
     system.click = function (xVal, yVal) {
 
-        dropSynth.play(
-            1,
-            ['freq', internal.getNote().fq()]
-        );
+        dropSynth.triggerAttackRelease(internal.getNote().fq(), '2n');
 
         state.x = xVal;
         state.y = yVal;

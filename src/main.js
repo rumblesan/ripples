@@ -1,14 +1,11 @@
 
 var SoundWall = require('./app/soundwall');
-var Audio = require('./app/audio');
 
 (function () {
 
     var app = document.getElementById('app');
 
-    var audioCtx = Audio.createContext(window);
-
-    var soundwall = SoundWall.create(window.innerWidth, window.innerHeight, audioCtx);
+    var soundwall = SoundWall.create(window.innerWidth, window.innerHeight);
 
     app.appendChild(soundwall.domElement);
 

@@ -5,7 +5,7 @@ var Three = require('../lib/three.min');
 var Wall = require('./wall');
 var Audio = require('./audio');
 
-var create = function(sceneWidth, sceneHeight, audioCtx) {
+var create = function(sceneWidth, sceneHeight) {
 
     'use strict';
 
@@ -16,7 +16,7 @@ var create = function(sceneWidth, sceneHeight, audioCtx) {
         animationSpeed: 0.1
     };
 
-    var audioSystem = Audio.create(audioCtx);
+    var audioSystem = Audio.create();
 
     var scene = new Three.Scene();
     var camera = new Three.PerspectiveCamera(
