@@ -33,13 +33,20 @@ Audio.create = function () {
     y: 0
   };
 
-  var volume = new Tone.Volume(-24);
-
-  var spaceFx = new Tone.Freeverb();
-
   var dropSynth = new Tone.PolySynth(config.dropVoices, Drop);
 
-  dropSynth.chain(spaceFx, volume, Tone.Master);
+  var delay = new Tone.FeedbackDelay('3n', 0.4);
+  delay.set('wet', 0.3);
+
+  var reverb = new Tone.Freeverb();
+
+  var filter = new Tone.Filter(400, 'lowpass');
+
+  var comp = new Tone.Compressor(-30, 2);
+
+  var volume = new Tone.Volume(-10);
+
+  dropSynth.chain(delay, reverb, filter, comp, volume, Tone.Master);
 
   system.click = function (xVal, yVal) {
 

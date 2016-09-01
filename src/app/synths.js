@@ -28,10 +28,10 @@ Drop.defaults = {
     'type': 'triangle'
   },
   'envelope': {
-    'attack': 0.01,
-    'decay': 0.3,
-    'sustain': 0.3,
-    'release': 1,
+    'attack': 0.1,
+    'decay': 0.7,
+    'sustain': 0.4,
+    'release': 3,
   }
 };
 
