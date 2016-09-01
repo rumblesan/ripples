@@ -1,17 +1,15 @@
 
-var Three = require('../lib/three.min');
+const Three = require('../lib/three.min');
 
-var Plane = {};
+export const createPoints = (xPoints, yPoints, tileSize) => {
 
-Plane.createPoints = function (xPoints, yPoints, tileSize) {
+  const points = {
+    xPoints: xPoints,
+    yPoints: yPoints,
+    p: []
+  };
 
-  var x, y, points;
-
-  points = {};
-  points.xPoints = xPoints;
-  points.yPoints = yPoints;
-  points.p = [];
-
+  let x, y;
   for (x = 0; x < xPoints; x += 1) {
     points.p[x] = [];
     for (y = 0; y < yPoints; y += 1) {
@@ -26,21 +24,20 @@ Plane.createPoints = function (xPoints, yPoints, tileSize) {
   return points;
 };
 
-Plane.createGeometry = function (points) {
+export const createGeometry = (points) => {
 
-  var geometry, x, y, triangles, t;
+  const geometry = new Three.Geometry();
 
-  geometry = new Three.Geometry();
-
+  let x, y;
   for (x = 0; x < points.xPoints; x += 1) {
     for (y = 0; y < points.yPoints; y += 1) {
       geometry.vertices.push(points.p[x][y]);
     }
   }
 
-  triangles = [];
+  const triangles = [];
 
-  var p1, p2, p3;
+  let p1, p2, p3;
   // Don't want to iterate over last row/column
   // Also ordering of points is important
   for (x = 0; x < (points.xPoints -1); x += 1) {
@@ -57,6 +54,7 @@ Plane.createGeometry = function (points) {
     }
   }
 
+  let t;
   for (t = 0; t < triangles.length; t += 1) {
     geometry.faces.push(triangles[t]);
   }
@@ -66,6 +64,3 @@ Plane.createGeometry = function (points) {
   return geometry;
 
 };
-
-module.exports = Plane;
-

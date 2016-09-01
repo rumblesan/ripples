@@ -1,7 +1,5 @@
 
-var Ripple = {};
-
-var config = {
+const config = {
   sizeIncr: 0.5,
   widthIncr: 0.1,
   energyDecay: 0.95,
@@ -11,8 +9,8 @@ var config = {
   startSize: 0
 };
 
-Ripple.create = function (xPos, yPos) {
-  var ripple = {
+export const create = (xPos, yPos) => {
+  const ripple = {
     energy: config.startEnergy,
     size: config.startSize,
     width: config.startWidth,
@@ -22,13 +20,13 @@ Ripple.create = function (xPos, yPos) {
   return ripple;
 };
 
-Ripple.genHeightMap = function (xPoints, yPoints) {
-  var heightMap = {
+export const genHeightMap = (xPoints, yPoints) => {
+  const heightMap = {
     x: xPoints,
     y: yPoints,
     heights: []
   };
-  var x, y;
+  let x, y;
   for (x = 0; x < heightMap.x; x += 1) {
     heightMap.heights[x] = [];
     for (y = 0; y < heightMap.y; y += 1) {
@@ -38,29 +36,28 @@ Ripple.genHeightMap = function (xPoints, yPoints) {
   return heightMap;
 };
 
-Ripple.calcOffset = function(ripple, t, x, y) {
+export const calcOffset = (ripple, t, x, y) => {
 
-  var cellDistance = Math.sqrt(Math.pow((ripple.xPos - x), 2) + Math.pow((ripple.yPos - y), 2));
-  var diffDistance = cellDistance - ripple.size;
-  var decay = (Math.max(ripple.width - Math.abs(diffDistance), 0) / ripple.width);
-  var heightVar = Math.sin(t - cellDistance) * decay * ripple.energy;
+  const cellDistance = Math.sqrt(Math.pow((ripple.xPos - x), 2) + Math.pow((ripple.yPos - y), 2));
+  const diffDistance = cellDistance - ripple.size;
+  const decay = (Math.max(ripple.width - Math.abs(diffDistance), 0) / ripple.width);
+  const heightVar = Math.sin(t - cellDistance) * decay * ripple.energy;
 
   return heightVar;
 };
 
-Ripple.applyRipple = function (ripple, t, heightMap) {
-  var x, y, o;
+export const applyRipple = (ripple, t, heightMap) => {
+  let x, y;
   for (x = 0; x < heightMap.x; x += 1) {
     for (y = 0; y < heightMap.y; y += 1) {
-      o = Ripple.calcOffset(ripple, t, x, y);
-      heightMap.heights[x][y] += o;
+      heightMap.heights[x][y] += calcOffset(ripple, t, x, y);
     }
   }
 };
 
-Ripple.update = function (ripples) {
-  var remainingRipples = [];
-  var r, i;
+export const update = (ripples) => {
+  let remainingRipples = [];
+  let r, i;
   for (i = 0; i < ripples.length; i += 1) {
     r = ripples[i];
 
@@ -75,6 +72,3 @@ Ripple.update = function (ripples) {
   }
   return remainingRipples;
 };
-
-module.exports = Ripple;
-

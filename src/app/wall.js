@@ -1,16 +1,23 @@
 
-var Three = require('../lib/three.min');
-var Plane = require('./plane');
-var Ripple = require('./ripple');
+const Three = require('../lib/three.min');
 
-var Wall = {};
-var internal = {};
+import * as Plane from './plane';
+import * as Ripple from './ripple';
 
-Wall.createWall = function (xPoints, yPoints, tileSize) {
+const applyHeightMap = (wall, rippleHeight, heightMap) => {
+  let x, y;
+  for (x = 0; x < heightMap.x; x += 1) {
+    for (y = 0; y < heightMap.y; y += 1) {
+      wall.points.p[x][y].setZ(heightMap.heights[x][y] * rippleHeight);
+    }
+  }
+};
 
-  var wall = {};
+export default (xPoints, yPoints, tileSize) => {
 
-  var rippleState = {
+  let wall = {};
+
+  const rippleState = {
     ripples: [],
     height: 3
   };
@@ -37,20 +44,19 @@ Wall.createWall = function (xPoints, yPoints, tileSize) {
   wall.mesh.translateY(-(yPoints * tileSize) / 2);
 
   wall.createRipple = function (xPosition, yPosition) {
-    var ripple = Ripple.create(xPosition, yPosition);
-    rippleState.ripples.push(ripple);
+    rippleState.ripples.push(Ripple.create(xPosition, yPosition));
   };
 
   wall.animate = function (t) {
 
-    var heightMap = Ripple.genHeightMap(wall.points.xPoints, wall.points.yPoints);
-    var r, i;
+    const heightMap = Ripple.genHeightMap(wall.points.xPoints, wall.points.yPoints);
+    let r, i;
     for (i = 0; i < rippleState.ripples.length; i += 1) {
       r = rippleState.ripples[i];
       Ripple.applyRipple(r, t, heightMap);
     }
 
-    internal.applyHeightMap(wall, rippleState.height, heightMap);
+    applyHeightMap(wall, rippleState.height, heightMap);
     wall.mesh.geometry.verticesNeedUpdate = true;
     wall.mesh.geometry.normalsNeedUpdate = true;
     wall.mesh.geometry.computeFaceNormals();
@@ -61,16 +67,3 @@ Wall.createWall = function (xPoints, yPoints, tileSize) {
 
   return wall;
 };
-
-internal.applyHeightMap = function (wall, rippleHeight, heightMap) {
-  var x, y;
-  for (x = 0; x < heightMap.x; x += 1) {
-    for (y = 0; y < heightMap.y; y += 1) {
-      wall.points.p[x][y].setZ(heightMap.heights[x][y] * rippleHeight);
-    }
-  }
-};
-
-
-module.exports = Wall;
-

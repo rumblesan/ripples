@@ -1,11 +1,11 @@
 
-var SoundWall = require('./app/soundwall');
+import SoundWall from './app/soundwall';
 
 (function () {
 
-  var app = document.getElementById('app');
+  const app = document.getElementById('app');
 
-  var soundwall = SoundWall.create(window.innerWidth, window.innerHeight);
+  const soundwall = SoundWall(window.innerWidth, window.innerHeight);
 
   app.appendChild(soundwall.domElement);
 
