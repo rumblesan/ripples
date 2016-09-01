@@ -1,7 +1,7 @@
 
 var Teoria = require('teoria');
 var Tone   = require('Tone');
-var Drop = require('./synths');
+import Drop from './synths';
 
 var Audio = {};
 var internal = {};

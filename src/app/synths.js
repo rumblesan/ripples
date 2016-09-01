@@ -1,27 +1,50 @@
 
-var Tone   = require('Tone');
+import Tone from 'Tone';
 
-var Drop = function (options) {
+export class Drop {
 
-  options = this.defaultArg(options, Drop.defaults);
-  Tone.Monophonic.call(this, options);
-  
-  this.oscillator = new Tone.OmniOscillator(options.oscillator);
+  constructor(options) {
 
-  this.frequency = this.oscillator.frequency;
+    options = this.defaultArg(options, Drop.defaults);
+    Tone.Monophonic.call(this, options);
 
-  this.detune = this.oscillator.detune;
+    this.oscillator = new Tone.OmniOscillator(options.oscillator);
 
-  this.envelope = new Tone.AmplitudeEnvelope(options.envelope);
+    this.frequency = this.oscillator.frequency;
 
-  this.oscillator.chain(this.envelope, this.output);
+    this.detune = this.oscillator.detune;
 
-  this.oscillator.start();
-  this._readOnly(['oscillator', 'frequency', 'detune', 'envelope']);
+    this.envelope = new Tone.AmplitudeEnvelope(options.envelope);
 
-};
+    this.oscillator.chain(this.envelope, this.output);
 
-Tone.extend(Drop, Tone.Monophonic);
+    this.oscillator.start();
+    this._readOnly(['oscillator', 'frequency', 'detune', 'envelope']);
+  }
+
+  _triggerEnvelopeAttack(time, velocity) {
+    this.envelope.triggerAttack(time, velocity);
+    return this;
+  }
+
+  _triggerEnvelopeRelease(time) {
+    this.envelope.triggerRelease(time);
+    return this;
+  }
+
+  dispose() {
+    Tone.Monophonic.prototype.dispose.call(this);
+    this._writable(['oscillator', 'frequency', 'detune', 'envelope']);
+    this.oscillator.dispose();
+    this.oscillator = null;
+    this.envelope.dispose();
+    this.envelope = null;
+    this.frequency = null;
+    this.detune = null;
+    return this;
+  }
+
+}
 
 Drop.defaults = {
   'oscillator': {
@@ -35,27 +58,4 @@ Drop.defaults = {
   }
 };
 
-Drop.prototype._triggerEnvelopeAttack = function(time, velocity){
-  this.envelope.triggerAttack(time, velocity);
-  return this;	
-};
-
-Drop.prototype._triggerEnvelopeRelease = function(time){
-  this.envelope.triggerRelease(time);
-  return this;
-};
-
-
-Drop.prototype.dispose = function(){
-  Tone.Monophonic.prototype.dispose.call(this);
-  this._writable(['oscillator', 'frequency', 'detune', 'envelope']);
-  this.oscillator.dispose();
-  this.oscillator = null;
-  this.envelope.dispose();
-  this.envelope = null;
-  this.frequency = null;
-  this.detune = null;
-  return this;
-};
-
-module.exports = Drop;
+Tone.extend(Drop, Tone.Monophonic);
