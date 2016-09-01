@@ -1,18 +1,16 @@
-/*jslint browser: true */
 
-var domready = require('./lib/ready');
 var SoundWall = require('./app/soundwall');
 var Audio = require('./app/audio');
 
-domready(function () {
+(function () {
 
-    document.body = document.createElement('body');
+    var app = document.getElementById('app');
 
     var audioCtx = Audio.createContext(window);
 
     var soundwall = SoundWall.create(window.innerWidth, window.innerHeight, audioCtx);
 
-    document.body.appendChild(soundwall.domElement);
+    app.appendChild(soundwall.domElement);
 
     soundwall.domElement.addEventListener('click', function (e) {
         e.preventDefault();
@@ -25,5 +23,4 @@ domready(function () {
 
     soundwall.render(0);
 
-});
-
+})();
