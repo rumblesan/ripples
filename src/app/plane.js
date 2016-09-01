@@ -1,5 +1,4 @@
-
-const Three = require('../lib/three.min');
+/* global THREE */
 
 export const createPoints = (xPoints, yPoints, tileSize) => {
 
@@ -13,7 +12,7 @@ export const createPoints = (xPoints, yPoints, tileSize) => {
   for (x = 0; x < xPoints; x += 1) {
     points.p[x] = [];
     for (y = 0; y < yPoints; y += 1) {
-      points.p[x][y] = new Three.Vector3(
+      points.p[x][y] = new THREE.Vector3(
         x * tileSize,
         y * tileSize,
         0
@@ -26,7 +25,7 @@ export const createPoints = (xPoints, yPoints, tileSize) => {
 
 export const createGeometry = (points) => {
 
-  const geometry = new Three.Geometry();
+  const geometry = new THREE.Geometry();
 
   let x, y;
   for (x = 0; x < points.xPoints; x += 1) {
@@ -45,12 +44,12 @@ export const createGeometry = (points) => {
       p1 = y + ( x      * points.yPoints);
       p2 = y + ((x + 1) * points.yPoints);
       p3 = y + ((x + 1) * points.yPoints) + 1;
-      triangles.push(new Three.Face3(p1, p2, p3));
+      triangles.push(new THREE.Face3(p1, p2, p3));
 
       p1 = y + ( x      * points.yPoints);
       p2 = y + ((x + 1) * points.yPoints) + 1;
       p3 = y + ( x      * points.yPoints) + 1;
-      triangles.push(new Three.Face3(p1, p2, p3));
+      triangles.push(new THREE.Face3(p1, p2, p3));
     }
   }
 

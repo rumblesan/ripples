@@ -1,5 +1,4 @@
-
-const Three = require('../lib/three.min');
+/* global THREE */
 
 import * as Plane from './plane';
 import * as Ripple from './ripple';
@@ -25,15 +24,15 @@ export default (xPoints, yPoints, tileSize) => {
   wall.points = Plane.createPoints(xPoints, yPoints, tileSize);
   wall.geometry = Plane.createGeometry(wall.points);
 
-  wall.material = new Three.MeshPhongMaterial({
+  wall.material = new THREE.MeshPhongMaterial({
     ambient: 0xff0000,
     color: 0x09BDE6,
     specular: 0x999966,
     shininess: 12,
-    shading: Three.FlatShading
+    shading: THREE.FlatShading
   });
 
-  wall.mesh = new Three.Mesh(wall.geometry, wall.material);
+  wall.mesh = new THREE.Mesh(wall.geometry, wall.material);
 
   // create per face shadows
   wall.geometry.computeFaceNormals();

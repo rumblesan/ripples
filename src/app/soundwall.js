@@ -1,5 +1,4 @@
-
-const Three = require('../lib/three.min');
+/* global THREE */
 
 import Wall from './wall';
 import Audio from './audio';
@@ -17,8 +16,8 @@ export default (sceneWidth, sceneHeight) => {
 
   const audioSystem = Audio();
 
-  const scene = new Three.Scene();
-  const camera = new Three.PerspectiveCamera(
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(
     75,
     sceneWidth / sceneHeight,
     0.1,
@@ -36,10 +35,10 @@ export default (sceneWidth, sceneHeight) => {
   const wall = Wall(wallWidth, wallHeight, config.tilesize);
   scene.add(wall.mesh);
 
-  const renderer = new Three.WebGLRenderer();
+  const renderer = new THREE.WebGLRenderer();
   renderer.setSize( sceneWidth, sceneHeight );
 
-  const mainLight = new Three.DirectionalLight(0xbfaadd,0.5);
+  const mainLight = new THREE.DirectionalLight(0xbfaadd,0.5);
   mainLight.castShadow = true;
   mainLight.position.set(0, 0, 100);
   scene.add(mainLight);
@@ -55,8 +54,8 @@ export default (sceneWidth, sceneHeight) => {
     }
   };
 
-  const raycaster = new Three.Raycaster();
-  let mouse = new Three.Vector2();
+  const raycaster = new THREE.Raycaster();
+  let mouse = new THREE.Vector2();
   const click = function (xVal, yVal) {
     mouse.x = (xVal * 2) - 1;
     mouse.y = -(yVal * 2) + 1;

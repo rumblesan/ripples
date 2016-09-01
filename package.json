@@ -10,12 +10,9 @@
   "author": "Guy John",
   "license": "BSD-3-Clause",
   "scripts": {
-    "prebuild": "rm -rf ./dist/*",
-    "build": "browserify . -o ./dist/app.js",
-    "watch": "watchify . -o ./dist/app.js",
-    "postbuild": "cp -r ./statics/* ./dist/; cp -r ./html/* ./dist/; cat ./style/*.css > ./dist/style.css;",
-    "clean": "rm -rf ./dist/*",
-    "serve": "http-server ./dist"
+    "build": "browserify . -o ./app.js",
+    "watch": "watchify . -o ./app.js",
+    "serve": "http-server ."
   },
   "devDependencies": {
     "babel-preset-es2015": "^6.14.0",
