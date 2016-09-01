@@ -1,6 +1,7 @@
 
 var Teoria = require('teoria');
 var Tone   = require('Tone');
+var Drop = require('./synths');
 
 var Audio = {};
 var internal = {};
@@ -36,7 +37,7 @@ Audio.create = function () {
 
     var spaceFx = new Tone.Freeverb();
 
-    var dropSynth = new Tone.PolySynth(config.dropVoices, Tone.Synth);
+    var dropSynth = new Tone.PolySynth(config.dropVoices, Drop);
 
     dropSynth.chain(spaceFx, volume, Tone.Master);
 
