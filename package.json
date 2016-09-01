@@ -8,7 +8,7 @@
     "url": "http://github.com/rumblesan/soundwall.git"
   },
   "author": "Guy John",
-  "license": "BSD-3",
+  "license": "BSD-3-Clause",
   "scripts": {
     "prebuild": "rm -rf ./dist/*",
     "build": "browserify . -o ./dist/app.js",
