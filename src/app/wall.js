@@ -25,7 +25,6 @@ export default (xPoints, yPoints, tileSize) => {
   wall.geometry = Plane.createGeometry(wall.points);
 
   wall.material = new THREE.MeshPhongMaterial({
-    ambient: 0xff0000,
     color: 0x09BDE6,
     specular: 0x999966,
     shininess: 12,
