@@ -1,23 +1,23 @@
 
-import SoundWall from './app/soundwall';
+import App from './app';
 
 (function () {
 
-  const app = document.getElementById('app');
+  const elem = document.getElementById('app');
 
-  const soundwall = SoundWall(window.innerWidth, window.innerHeight);
+  const app = App(window.innerWidth, window.innerHeight);
 
-  app.appendChild(soundwall.domElement);
+  elem.appendChild(app.domElement);
 
-  soundwall.domElement.addEventListener('click', function (e) {
+  app.domElement.addEventListener('click', function (e) {
     e.preventDefault();
-    soundwall.click(e.clientX / window.innerWidth, e.clientY / window.innerHeight);
+    app.click(e.clientX / window.innerWidth, e.clientY / window.innerHeight);
   });
 
   window.addEventListener( 'resize', function () {
-    soundwall.resize(window.innerWidth, window.innerHeight);
+    app.resize(window.innerWidth, window.innerHeight);
   }, false );
 
-  soundwall.render(0);
+  app.render(0);
 
 })();

@@ -22392,160 +22392,6 @@ exports.default = function () {
 };
 
 },{"./synths":22,"Tone":1,"teoria":2}],19:[function(require,module,exports){
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-/* global THREE */
-
-var createPoints = exports.createPoints = function createPoints(xPoints, yPoints, tileSize) {
-
-  var points = {
-    xPoints: xPoints,
-    yPoints: yPoints,
-    p: []
-  };
-
-  var x = void 0,
-      y = void 0;
-  for (x = 0; x < xPoints; x += 1) {
-    points.p[x] = [];
-    for (y = 0; y < yPoints; y += 1) {
-      points.p[x][y] = new THREE.Vector3(x * tileSize, y * tileSize, 0);
-    }
-  }
-
-  return points;
-};
-
-var createGeometry = exports.createGeometry = function createGeometry(points) {
-
-  var geometry = new THREE.Geometry();
-
-  var x = void 0,
-      y = void 0;
-  for (x = 0; x < points.xPoints; x += 1) {
-    for (y = 0; y < points.yPoints; y += 1) {
-      geometry.vertices.push(points.p[x][y]);
-    }
-  }
-
-  var triangles = [];
-
-  var p1 = void 0,
-      p2 = void 0,
-      p3 = void 0;
-  // Don't want to iterate over last row/column
-  // Also ordering of points is important
-  for (x = 0; x < points.xPoints - 1; x += 1) {
-    for (y = 0; y < points.yPoints - 1; y += 1) {
-      p1 = y + x * points.yPoints;
-      p2 = y + (x + 1) * points.yPoints;
-      p3 = y + (x + 1) * points.yPoints + 1;
-      triangles.push(new THREE.Face3(p1, p2, p3));
-
-      p1 = y + x * points.yPoints;
-      p2 = y + (x + 1) * points.yPoints + 1;
-      p3 = y + x * points.yPoints + 1;
-      triangles.push(new THREE.Face3(p1, p2, p3));
-    }
-  }
-
-  var t = void 0;
-  for (t = 0; t < triangles.length; t += 1) {
-    geometry.faces.push(triangles[t]);
-  }
-
-  geometry.computeBoundingSphere();
-
-  return geometry;
-};
-
-},{}],20:[function(require,module,exports){
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var config = {
-  sizeIncr: 0.5,
-  widthIncr: 0.1,
-  energyDecay: 0.95,
-  cleanupThresh: 0.0001,
-  startEnergy: 1,
-  startWidth: 2,
-  startSize: 0
-};
-
-var create = exports.create = function create(xPos, yPos) {
-  var ripple = {
-    energy: config.startEnergy,
-    size: config.startSize,
-    width: config.startWidth,
-    xPos: xPos,
-    yPos: yPos
-  };
-  return ripple;
-};
-
-var genHeightMap = exports.genHeightMap = function genHeightMap(xPoints, yPoints) {
-  var heightMap = {
-    x: xPoints,
-    y: yPoints,
-    heights: []
-  };
-  var x = void 0,
-      y = void 0;
-  for (x = 0; x < heightMap.x; x += 1) {
-    heightMap.heights[x] = [];
-    for (y = 0; y < heightMap.y; y += 1) {
-      heightMap.heights[x][y] = 0;
-    }
-  }
-  return heightMap;
-};
-
-var calcOffset = exports.calcOffset = function calcOffset(ripple, t, x, y) {
-
-  var cellDistance = Math.sqrt(Math.pow(ripple.xPos - x, 2) + Math.pow(ripple.yPos - y, 2));
-  var diffDistance = cellDistance - ripple.size;
-  var decay = Math.max(ripple.width - Math.abs(diffDistance), 0) / ripple.width;
-  var heightVar = Math.sin(t - cellDistance) * decay * ripple.energy;
-
-  return heightVar;
-};
-
-var applyRipple = exports.applyRipple = function applyRipple(ripple, t, heightMap) {
-  var x = void 0,
-      y = void 0;
-  for (x = 0; x < heightMap.x; x += 1) {
-    for (y = 0; y < heightMap.y; y += 1) {
-      heightMap.heights[x][y] += calcOffset(ripple, t, x, y);
-    }
-  }
-};
-
-var update = exports.update = function update(ripples) {
-  var remainingRipples = [];
-  var r = void 0,
-      i = void 0;
-  for (i = 0; i < ripples.length; i += 1) {
-    r = ripples[i];
-
-    r.energy = r.energy * config.energyDecay;
-    r.size += config.sizeIncr;
-    r.width += config.widthIncr;
-
-    if (r.energy > config.cleanupThresh) {
-      remainingRipples.push(r);
-    }
-  }
-  return remainingRipples;
-};
-
-},{}],21:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22642,7 +22488,161 @@ exports.default = function (sceneWidth, sceneHeight) {
   };
 };
 
-},{"./audio":18,"./wall":23}],22:[function(require,module,exports){
+},{"./audio":18,"./wall":23}],20:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+/* global THREE */
+
+var createPoints = exports.createPoints = function createPoints(xPoints, yPoints, tileSize) {
+
+  var points = {
+    xPoints: xPoints,
+    yPoints: yPoints,
+    p: []
+  };
+
+  var x = void 0,
+      y = void 0;
+  for (x = 0; x < xPoints; x += 1) {
+    points.p[x] = [];
+    for (y = 0; y < yPoints; y += 1) {
+      points.p[x][y] = new THREE.Vector3(x * tileSize, y * tileSize, 0);
+    }
+  }
+
+  return points;
+};
+
+var createGeometry = exports.createGeometry = function createGeometry(points) {
+
+  var geometry = new THREE.Geometry();
+
+  var x = void 0,
+      y = void 0;
+  for (x = 0; x < points.xPoints; x += 1) {
+    for (y = 0; y < points.yPoints; y += 1) {
+      geometry.vertices.push(points.p[x][y]);
+    }
+  }
+
+  var triangles = [];
+
+  var p1 = void 0,
+      p2 = void 0,
+      p3 = void 0;
+  // Don't want to iterate over last row/column
+  // Also ordering of points is important
+  for (x = 0; x < points.xPoints - 1; x += 1) {
+    for (y = 0; y < points.yPoints - 1; y += 1) {
+      p1 = y + x * points.yPoints;
+      p2 = y + (x + 1) * points.yPoints;
+      p3 = y + (x + 1) * points.yPoints + 1;
+      triangles.push(new THREE.Face3(p1, p2, p3));
+
+      p1 = y + x * points.yPoints;
+      p2 = y + (x + 1) * points.yPoints + 1;
+      p3 = y + x * points.yPoints + 1;
+      triangles.push(new THREE.Face3(p1, p2, p3));
+    }
+  }
+
+  var t = void 0;
+  for (t = 0; t < triangles.length; t += 1) {
+    geometry.faces.push(triangles[t]);
+  }
+
+  geometry.computeBoundingSphere();
+
+  return geometry;
+};
+
+},{}],21:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var config = {
+  sizeIncr: 0.5,
+  widthIncr: 0.1,
+  energyDecay: 0.95,
+  cleanupThresh: 0.0001,
+  startEnergy: 1,
+  startWidth: 2,
+  startSize: 0
+};
+
+var create = exports.create = function create(xPos, yPos) {
+  var ripple = {
+    energy: config.startEnergy,
+    size: config.startSize,
+    width: config.startWidth,
+    xPos: xPos,
+    yPos: yPos
+  };
+  return ripple;
+};
+
+var genHeightMap = exports.genHeightMap = function genHeightMap(xPoints, yPoints) {
+  var heightMap = {
+    x: xPoints,
+    y: yPoints,
+    heights: []
+  };
+  var x = void 0,
+      y = void 0;
+  for (x = 0; x < heightMap.x; x += 1) {
+    heightMap.heights[x] = [];
+    for (y = 0; y < heightMap.y; y += 1) {
+      heightMap.heights[x][y] = 0;
+    }
+  }
+  return heightMap;
+};
+
+var calcOffset = exports.calcOffset = function calcOffset(ripple, t, x, y) {
+
+  var cellDistance = Math.sqrt(Math.pow(ripple.xPos - x, 2) + Math.pow(ripple.yPos - y, 2));
+  var diffDistance = cellDistance - ripple.size;
+  var decay = Math.max(ripple.width - Math.abs(diffDistance), 0) / ripple.width;
+  var heightVar = Math.sin(t - cellDistance) * decay * ripple.energy;
+
+  return heightVar;
+};
+
+var applyRipple = exports.applyRipple = function applyRipple(ripple, t, heightMap) {
+  var x = void 0,
+      y = void 0;
+  for (x = 0; x < heightMap.x; x += 1) {
+    for (y = 0; y < heightMap.y; y += 1) {
+      heightMap.heights[x][y] += calcOffset(ripple, t, x, y);
+    }
+  }
+};
+
+var update = exports.update = function update(ripples) {
+  var remainingRipples = [];
+  var r = void 0,
+      i = void 0;
+  for (i = 0; i < ripples.length; i += 1) {
+    r = ripples[i];
+
+    r.energy = r.energy * config.energyDecay;
+    r.size += config.sizeIncr;
+    r.width += config.widthIncr;
+
+    if (r.energy > config.cleanupThresh) {
+      remainingRipples.push(r);
+    }
+  }
+  return remainingRipples;
+};
+
+},{}],22:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -22809,33 +22809,33 @@ exports.default = function (xPoints, yPoints, tileSize) {
   return wall;
 };
 
-},{"./plane":19,"./ripple":20}],24:[function(require,module,exports){
+},{"./plane":20,"./ripple":21}],24:[function(require,module,exports){
 'use strict';
 
-var _soundwall = require('./app/soundwall');
+var _app = require('./app');
 
-var _soundwall2 = _interopRequireDefault(_soundwall);
+var _app2 = _interopRequireDefault(_app);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 (function () {
 
-  var app = document.getElementById('app');
+  var elem = document.getElementById('app');
 
-  var soundwall = (0, _soundwall2.default)(window.innerWidth, window.innerHeight);
+  var app = (0, _app2.default)(window.innerWidth, window.innerHeight);
 
-  app.appendChild(soundwall.domElement);
+  elem.appendChild(app.domElement);
 
-  soundwall.domElement.addEventListener('click', function (e) {
+  app.domElement.addEventListener('click', function (e) {
     e.preventDefault();
-    soundwall.click(e.clientX / window.innerWidth, e.clientY / window.innerHeight);
+    app.click(e.clientX / window.innerWidth, e.clientY / window.innerHeight);
   });
 
   window.addEventListener('resize', function () {
-    soundwall.resize(window.innerWidth, window.innerHeight);
+    app.resize(window.innerWidth, window.innerHeight);
   }, false);
 
-  soundwall.render(0);
+  app.render(0);
 })();
 
-},{"./app/soundwall":21}]},{},[24]);
+},{"./app":19}]},{},[24]);
