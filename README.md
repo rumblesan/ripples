@@ -1,11 +1,6 @@
-# SoundWall
+# Ripples
 
 An audio visual experiment
-
-
-## Description
-
-
 
 
 ## Contact
