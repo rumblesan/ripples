@@ -1,4 +1,4 @@
-import Tone from 'Tone';
+import Tone from 'tone';
 
 export class Drop {
   constructor(options) {
