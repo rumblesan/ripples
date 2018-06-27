@@ -1,4 +1,3 @@
-
 import Teoria from 'teoria';
 import Tone from 'Tone';
 import Drop from './synths';
@@ -6,7 +5,7 @@ import Drop from './synths';
 const config = {
   dropVoices: 6,
   scaleNotes: 7,
-  scale: Teoria.note('a4').scale('minor')
+  scale: Teoria.note('a4').scale('minor'),
 };
 
 const getNote = () => {
@@ -15,7 +14,6 @@ const getNote = () => {
 };
 
 export default () => {
-
   const dropSynth = new Tone.PolySynth(config.dropVoices, Drop);
 
   const delay = new Tone.FeedbackDelay('3n', 0.4);
@@ -34,7 +32,7 @@ export default () => {
   const system = {
     click: () => {
       dropSynth.triggerAttackRelease(getNote().fq(), '2n');
-    }
+    },
   };
 
   return system;

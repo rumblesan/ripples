@@ -1,5 +1,4 @@
-/* global THREE */
-
+import { MeshPhongMaterial, Mesh } from 'three';
 import * as Plane from './plane';
 import * as Ripple from './ripple';
 
@@ -13,25 +12,24 @@ const applyHeightMap = (wall, rippleHeight, heightMap) => {
 };
 
 export default (xPoints, yPoints, tileSize) => {
-
   let wall = {};
 
   const rippleState = {
     ripples: [],
-    height: 3
+    height: 3,
   };
 
   wall.points = Plane.createPoints(xPoints, yPoints, tileSize);
   wall.geometry = Plane.createGeometry(wall.points);
 
-  wall.material = new THREE.MeshPhongMaterial({
-    color: 0x09BDE6,
+  wall.material = new MeshPhongMaterial({
+    color: 0x09bde6,
     specular: 0x999966,
     shininess: 12,
-    shading: THREE.FlatShading
+    flatShading: true,
   });
 
-  wall.mesh = new THREE.Mesh(wall.geometry, wall.material);
+  wall.mesh = new Mesh(wall.geometry, wall.material);
 
   // create per face shadows
   wall.geometry.computeFaceNormals();
@@ -41,13 +39,15 @@ export default (xPoints, yPoints, tileSize) => {
   wall.mesh.translateX(-(xPoints * tileSize) / 2);
   wall.mesh.translateY(-(yPoints * tileSize) / 2);
 
-  wall.createRipple = function (xPosition, yPosition) {
+  wall.createRipple = function(xPosition, yPosition) {
     rippleState.ripples.push(Ripple.create(xPosition, yPosition));
   };
 
-  wall.animate = function (t) {
-
-    const heightMap = Ripple.genHeightMap(wall.points.xPoints, wall.points.yPoints);
+  wall.animate = function(t) {
+    const heightMap = Ripple.genHeightMap(
+      wall.points.xPoints,
+      wall.points.yPoints
+    );
     let r, i;
     for (i = 0; i < rippleState.ripples.length; i += 1) {
       r = rippleState.ripples[i];
@@ -60,7 +60,6 @@ export default (xPoints, yPoints, tileSize) => {
     wall.mesh.geometry.computeFaceNormals();
 
     rippleState.ripples = Ripple.update(rippleState.ripples);
-
   };
 
   return wall;

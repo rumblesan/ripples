@@ -2,40 +2,42 @@
   "name": "ripples",
   "version": "0.1.0",
   "description": "A three.js experiment",
-  "main": "src/main.js",
+  "homepage": "https://waves.rumblesan.com",
+  "author": "Guy John <guy@rumblesan.com>",
+  "license": "BSD-3-Clause",
   "repository": {
     "type": "git",
-    "url": "http://github.com/rumblesan/ripples.git"
+    "url": "https://github.com/rumblesan/ripples.git"
   },
-  "author": "Guy John",
-  "license": "BSD-3-Clause",
+  "bugs": {
+    "url": "https://github.com/rumblesan/waves/issues"
+  },
   "scripts": {
-    "build": "browserify . -o ./app.js",
-    "watch": "watchify . -o ./app.js",
-    "serve": "http-server ."
+    "start": "NODE_ENV=development webpack-dev-server -d --mode development",
+    "build": "webpack-cli --mode production",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "devDependencies": {
-    "babel-preset-es2015": "^6.14.0",
-    "babelify": "^7.3.0",
-    "browserify": "^13.1.0",
-    "http-server": "^0.8.0",
-    "watchify": "^3.7.0"
+    "babel-core": "6.26.3",
+    "babel-eslint": "7.2.3",
+    "babel-loader": "7.1.4",
+    "babel-polyfill": "6.23.0",
+    "babel-preset-env": "1.7.0",
+    "css-loader": "0.28.11",
+    "eslint": "4.19.1",
+    "eslint-config-prettier": "2.9.0",
+    "eslint-plugin-prettier": "2.6.0",
+    "file-loader": "1.1.11",
+    "prettier": "1.13.4",
+    "source-map-loader": "0.2.3",
+    "style-loader": "0.21.0",
+    "webpack": "4.10.2",
+    "webpack-cli": "3.0.8",
+    "webpack-dev-server": "3.1.4"
   },
   "dependencies": {
-    "teoria": "^1.12.0",
-    "tone": "^0.7.1",
-    "underscore": "^1.8.3"
-  },
-  "browserify": {
-    "transform": [
-      [
-        "babelify",
-        {
-          "presets": [
-            "es2015"
-          ]
-        }
-      ]
-    ]
+    "teoria": "2.5.0",
+    "three": "0.93.0",
+    "tone": "0.12.80"
   }
 }

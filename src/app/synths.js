@@ -1,10 +1,7 @@
-
 import Tone from 'Tone';
 
 export class Drop {
-
   constructor(options) {
-
     options = this.defaultArg(options, Drop.defaults);
     Tone.Monophonic.call(this, options);
 
@@ -43,19 +40,18 @@ export class Drop {
     this.detune = null;
     return this;
   }
-
 }
 
 Drop.defaults = {
-  'oscillator': {
-    'type': 'triangle'
+  oscillator: {
+    type: 'triangle',
   },
-  'envelope': {
-    'attack': 0.1,
-    'decay': 0.7,
-    'sustain': 0.4,
-    'release': 3,
-  }
+  envelope: {
+    attack: 0.1,
+    decay: 0.7,
+    sustain: 0.4,
+    release: 3,
+  },
 };
 
 Tone.extend(Drop, Tone.Monophonic);
