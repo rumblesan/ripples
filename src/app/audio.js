@@ -1,5 +1,5 @@
 import Teoria from 'teoria';
-import Tone from 'Tone';
+import Tone from 'tone';
 import Drop from './synths';
 
 const config = {
