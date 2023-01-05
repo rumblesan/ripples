@@ -1,6 +1,5 @@
-/* global process */
-
 const path = require('path');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
   entry: path.resolve(__dirname, 'src/app.js'),
@@ -8,14 +7,21 @@ module.exports = {
     path: path.resolve(__dirname, 'dist'),
     filename: 'app.js',
   },
+  plugins: [new MiniCssExtractPlugin()],
   module: {
     rules: [
       {
         test: /\.js$/,
+        exclude: [path.resolve(__dirname, 'node_modules')],
         loader: 'babel-loader',
-        exclude: /node_modules/,
+        options: {
+          presets: ['@babel/preset-env'],
+        },
       },
-      { test: /\.css$/, loader: 'style-loader!css-loader' },
+      {
+        test: /\.css$/,
+        use: [MiniCssExtractPlugin.loader, 'css-loader'],
+      },
       {
         test: /\.html$/,
         loader: 'file-loader',
@@ -30,15 +36,20 @@ module.exports = {
           name: '[name].[ext]',
         },
       },
-      {
-        test: /\.js$/,
-        use: ['source-map-loader'],
-        enforce: 'pre',
-      },
     ],
   },
   resolve: {
-    modules: [path.resolve('./node_modules'), path.resolve('./src')],
-    extensions: ['.json', '.js'],
+    modules: [
+      path.resolve('./node_modules'),
+      path.resolve('./src'),
+      path.resolve('./export'),
+    ],
+    extensions: ['.json', '.js', '.html'],
+  },
+  devServer: {
+    static: {
+      directory: path.join(__dirname, 'dist'),
+    },
+    port: 8080,
   },
 };

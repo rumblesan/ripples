@@ -1,0 +1,38 @@
+{
+	"filetype" : "C74Snapshot",
+	"version" : 2,
+	"minorversion" : 0,
+	"name" : "untitled",
+	"origin" : "ripple-synth",
+	"type" : "rnbo",
+	"subtype" : "",
+	"embed" : 0,
+	"snapshot" : 	{
+		"__sps" : 		{
+			"synth" : [ 				{
+
+				}
+, 				{
+
+				}
+, 				{
+
+				}
+, 				{
+
+				}
+ ]
+		}
+,
+		"feedback" : 		{
+			"value" : 0.7
+		}
+,
+		"delay_time" : 		{
+			"value" : 348.0
+		}
+,
+		"__presetid" : "ripple-synth"
+	}
+
+}

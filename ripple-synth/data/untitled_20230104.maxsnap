@@ -1,0 +1,38 @@
+{
+	"filetype" : "C74Snapshot",
+	"version" : 2,
+	"minorversion" : 0,
+	"name" : "untitled",
+	"origin" : "audiogen",
+	"type" : "rnbo",
+	"subtype" : "",
+	"embed" : 0,
+	"snapshot" : 	{
+		"__sps" : 		{
+			"synth" : [ 				{
+
+				}
+, 				{
+
+				}
+, 				{
+
+				}
+, 				{
+
+				}
+ ]
+		}
+,
+		"feedback" : 		{
+			"value" : 0.6
+		}
+,
+		"delay_time" : 		{
+			"value" : 394.0
+		}
+,
+		"__presetid" : "audiogen"
+	}
+
+}
