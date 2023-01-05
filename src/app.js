@@ -1,5 +1,6 @@
 import { Ripples } from 'app/ripples';
 
+import 'index.html';
 import 'images/favicon.ico';
 import 'style/style.css';
 
