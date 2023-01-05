@@ -24,14 +24,17 @@ export default () => {
 
   const system = {
     context,
+    started: false,
     synth: null,
   };
   system.click = () => {
-    context.resume();
-
     if (!system.synth) {
       console.log('no synth');
       return;
+    }
+    if (!system.started) {
+      system.started = true;
+      context.resume();
     }
     const midiPitch = getNote();
     const noteOnMessage = [144 + config.midiChannel, midiPitch, 100];
@@ -52,9 +55,15 @@ export default () => {
     system.synth.scheduleEvent(noteOnEvent);
     system.synth.scheduleEvent(noteOffEvent);
   };
+
   createDevice({ context, patcher }).then((device) => {
     device.node.connect(context.destination);
     system.synth = device;
+
+    const fm_ratio = device.parametersById.get('synth/fm_ratio');
+    fm_ratio.value = 2.51;
+    const fm_depth = device.parametersById.get('synth/fm_depth');
+    fm_depth.value = 0.5;
   });
 
   return system;

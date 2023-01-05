@@ -10,15 +10,43 @@
 	"snapshot" : 	{
 		"__sps" : 		{
 			"synth" : [ 				{
+					"fm_ratio" : 					{
+						"value" : 2.02
+					}
+,
+					"fm_depth" : 					{
+						"value" : 0.7
+					}
 
 				}
 , 				{
+					"fm_ratio" : 					{
+						"value" : 2.02
+					}
+,
+					"fm_depth" : 					{
+						"value" : 0.7
+					}
 
 				}
 , 				{
+					"fm_ratio" : 					{
+						"value" : 2.02
+					}
+,
+					"fm_depth" : 					{
+						"value" : 0.7
+					}
 
 				}
 , 				{
+					"fm_ratio" : 					{
+						"value" : 2.02
+					}
+,
+					"fm_depth" : 					{
+						"value" : 0.7
+					}
 
 				}
  ]
